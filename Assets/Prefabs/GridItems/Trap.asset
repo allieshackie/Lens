@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a793028403fda934bad7c8e9f2c6a10f, type: 3}
+  m_Name: Trap
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  Obj: {fileID: 98445973920719455, guid: 3326752ec92a89543b1cf276efbc4313, type: 3}
+  Sprite: {fileID: 21300000, guid: 2f0a5ce2e5e8dfc498924b19135d484c, type: 3}
+  Width: 1
+  Height: 1
