@@ -5,11 +5,13 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float _moveSpeed = 5.0f;
     [SerializeField] float _strafeSpeed = 3.0f;
+    [SerializeField] float _gravity = -9.81f;
 
     [SerializeField] float _lookSpeed = 0.15f;
 
     private CharacterController _controller;
     private Vector2 _moveVector;
+    private Vector3 _playerVelocity;
     private float _xRotation = 0f;
     private Player_Controls _playerControls;
 
@@ -58,6 +60,10 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 move = transform.right * _moveVector.x + transform.forward * _moveVector.y;
         _controller.Move(move * _moveSpeed * Time.deltaTime);
+
+        // Player was jittering a bunch if I didn't apply some downward grav
+        _playerVelocity.y += _gravity * Time.deltaTime;
+        _controller.Move(_playerVelocity * Time.deltaTime);
     }
 
     private void RotatePlayer()
