@@ -585,7 +585,7 @@ Transform:
   m_GameObject: {fileID: 384962403}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.0966, y: 3.44, z: -8.206301}
+  m_LocalPosition: {x: -4.8566, y: 3.44, z: -7.1963}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -643,7 +643,9 @@ MonoBehaviour:
   _strafeSpeed: 1.1
   _gravity: -9.81
   _lookSpeed: 0.15
-  _lookSmoothTime: 0.08
+  _lookDampening: 0.08
+  _maxLookUp: -45
+  _maxLookDown: 45
   _cameraTarget: {fileID: 1072391766}
   _playerCamera: {fileID: 865421699}
   _gunTransform: {fileID: 196609363}
@@ -808,7 +810,7 @@ Transform:
   m_GameObject: {fileID: 865421696}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.0966, y: 3.44, z: -8.206301}
+  m_LocalPosition: {x: -4.8566, y: 3.44, z: -7.1963}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

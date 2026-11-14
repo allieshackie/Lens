@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float _lookSpeed = 0.15f;
     [SerializeField] private float _lookDampening = 0.08f;
+    [SerializeField] private float _maxLookUp = -90;
+    [SerializeField] private float _maxLookDown = 90;
     [SerializeField] private Transform _cameraTarget;
 
     [SerializeField] private Camera _playerCamera;
@@ -138,9 +140,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void RotatePlayer()
     {
+        if (!_mouseCaptured)
+        {
+            return;
+        }
         Vector2 lookInput = _playerControls.Player.Look.ReadValue<Vector2>();
         _targetYaw += lookInput.x * _lookSpeed;
-        _targetPitch = Mathf.Clamp(_targetPitch - lookInput.y * _lookSpeed, -90f, 90f);
+        _targetPitch = Mathf.Clamp(_targetPitch - lookInput.y * _lookSpeed, _maxLookUp, _maxLookDown);
         
         float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetYaw, ref _yawVelocity, _lookDampening);
         _currentPitch = Mathf.SmoothDampAngle(_currentPitch, _targetPitch, ref _pitchVelocity, _lookDampening);
