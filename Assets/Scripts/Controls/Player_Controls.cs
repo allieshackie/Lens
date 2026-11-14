@@ -145,6 +145,15 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugReleaseMouse"",
+                    ""type"": ""Button"",
+                    ""id"": ""71859b9d-36b8-49f8-b052-540a47748143"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -255,6 +264,17 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fefc9c9d-b418-43b5-9850-5fdbdfcc0617"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DebugReleaseMouse"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -399,6 +419,7 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
         m_Player_BellLure = m_Player.FindAction("BellLure", throwIfNotFound: true);
         m_Player_RClick = m_Player.FindAction("RClick", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
+        m_Player_DebugReleaseMouse = m_Player.FindAction("DebugReleaseMouse", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Select = m_UI.FindAction("Select", throwIfNotFound: true);
@@ -494,6 +515,7 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_BellLure;
     private readonly InputAction m_Player_RClick;
     private readonly InputAction m_Player_Look;
+    private readonly InputAction m_Player_DebugReleaseMouse;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -529,6 +551,10 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Look".
         /// </summary>
         public InputAction @Look => m_Wrapper.m_Player_Look;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/DebugReleaseMouse".
+        /// </summary>
+        public InputAction @DebugReleaseMouse => m_Wrapper.m_Player_DebugReleaseMouse;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -573,6 +599,9 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @DebugReleaseMouse.started += instance.OnDebugReleaseMouse;
+            @DebugReleaseMouse.performed += instance.OnDebugReleaseMouse;
+            @DebugReleaseMouse.canceled += instance.OnDebugReleaseMouse;
         }
 
         /// <summary>
@@ -602,6 +631,9 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @DebugReleaseMouse.started -= instance.OnDebugReleaseMouse;
+            @DebugReleaseMouse.performed -= instance.OnDebugReleaseMouse;
+            @DebugReleaseMouse.canceled -= instance.OnDebugReleaseMouse;
         }
 
         /// <summary>
@@ -835,6 +867,13 @@ public partial class @Player_Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DebugReleaseMouse" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDebugReleaseMouse(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

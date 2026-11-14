@@ -1,5 +1,5 @@
+using System;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _gravity = -9.81f;
 
     [SerializeField] private float _lookSpeed = 0.15f;
+    [SerializeField] private float _lookDampening = 0.08f;
     [SerializeField] private Transform _cameraTarget;
 
     [SerializeField] private Camera _playerCamera;
@@ -25,8 +26,14 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController _controller;
     private Vector2 _moveVector;
     private Vector3 _playerVelocity;
-    private float _xRotation = 0f;
     private Player_Controls _playerControls;
+
+    private bool _mouseCaptured = true;
+    private float _targetYaw;
+    private float _targetPitch;
+    private float _currentPitch;
+    private float _yawVelocity;
+    private float _pitchVelocity;
 
     void Awake()
     {
@@ -41,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
         _playerControls.Player.Attack.performed += OnShoot;
 
+        _playerControls.Player.DebugReleaseMouse.performed += OnToggleMouse;
+
         _playerControls.Player.Enable();        
     }
 
@@ -50,6 +59,8 @@ public class PlayerMovement : MonoBehaviour
         _playerControls.Player.Movement.canceled -= OnMove;
 
         _playerControls.Player.Attack.performed -= OnShoot;
+
+        _playerControls.Player.DebugReleaseMouse.performed -= OnToggleMouse;
 
         _playerControls.Player.Disable();    
     }
@@ -80,48 +91,61 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnToggleMouse(InputAction.CallbackContext context)
+    {
+        _mouseCaptured = !_mouseCaptured;
+        if (_mouseCaptured)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
+
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+        _targetYaw = transform.eulerAngles.y;
+        _targetPitch = Mathf.DeltaAngle(0f, _cameraTarget.localEulerAngles.x);
+        _currentPitch = _targetPitch;
+
+        // Hack for now to hide cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
     {
-        MovePlayer();
-    }
-
-    void LateUpdate()
-    {
         RotatePlayer();
+        MovePlayer();
     }
 
     private void MovePlayer()
     {
         Vector3 move = transform.right * _moveVector.x + transform.forward * _moveVector.y;
-        _controller.Move(move * _moveSpeed * Time.deltaTime);
-
-
-        float animVelocity = Mathf.Clamp(Mathf.Round(_controller.velocity.magnitude), 0, _moveSpeed);
-        _animator.SetFloat("Velocity", animVelocity);
-
-        _velocityText.text = "Velocity: " + animVelocity;
-
-        // Player was jittering a bunch if I didn't apply some downward grav
         _playerVelocity.y += _gravity * Time.deltaTime;
-        _controller.Move(_playerVelocity * Time.deltaTime);
+        _controller.Move((move * _moveSpeed + _playerVelocity) * Time.deltaTime);
+
+        float animVelocity = Mathf.Clamp(_controller.velocity.magnitude, 0f, _moveSpeed);
+        _animator.SetFloat("Velocity", animVelocity, 0.1f, Time.deltaTime);
+
+        _velocityText.text = "Velocity: " + Mathf.Round(animVelocity);
     }
 
     private void RotatePlayer()
     {
         Vector2 lookInput = _playerControls.Player.Look.ReadValue<Vector2>();
-        float mouseX = lookInput.x * _lookSpeed;
-        float mouseY = lookInput.y * _lookSpeed;
+        _targetYaw += lookInput.x * _lookSpeed;
+        _targetPitch = Mathf.Clamp(_targetPitch - lookInput.y * _lookSpeed, -90f, 90f);
+        
+        float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetYaw, ref _yawVelocity, _lookDampening);
+        _currentPitch = Mathf.SmoothDampAngle(_currentPitch, _targetPitch, ref _pitchVelocity, _lookDampening);
 
-        _xRotation -= mouseY;
-        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
-
-        transform.Rotate(Vector3.up * mouseX);
-        // This lets us aim a bit up and down without actually rotating player model
-        _cameraTarget.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
+        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+        _cameraTarget.localRotation = Quaternion.Euler(_currentPitch, 0f, 0f);
     }
 }
