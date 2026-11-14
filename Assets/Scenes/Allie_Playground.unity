@@ -456,6 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _moveSpeed: 5
   _strafeSpeed: 3
+  _gravity: -9.81
   _lookSpeed: 0.15
 --- !u!143 &793420339
 CharacterController:
