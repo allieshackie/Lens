@@ -95,10 +95,11 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * _moveVector.x + transform.forward * _moveVector.y;
         _controller.Move(move * _moveSpeed * Time.deltaTime);
 
-        // Player was jittering a bunch if I didn't apply some downward grav
 
+        // _playerVelocity is compounding over time rather than resetting to 0 when not moving.
         // _animator.SetFloat("Velocity", _playerVelocity.magnitude);
 
+        // Player was jittering a bunch if I didn't apply some downward grav
         _playerVelocity.y += _gravity * Time.deltaTime;
         _controller.Move(_playerVelocity * Time.deltaTime);
     }
