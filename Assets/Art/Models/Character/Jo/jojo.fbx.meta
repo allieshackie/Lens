@@ -12,11 +12,6 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Mat_Eye_R
-    second: {fileID: 2100000, guid: ff6b7f18fa883fc458470006cef47e9e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
       name: Mat_Hair
     second: {fileID: 2100000, guid: 51d1042988681604abe7eddc8ad9c957, type: 2}
   - first:
@@ -46,7 +41,7 @@ ModelImporter:
     second: {fileID: 2100000, guid: dcf6d4bc1e8879a43a057dfd67aa6654, type: 2}
   materials:
     materialImportMode: 2
-    materialName: 1
+    materialName: 0
     materialSearch: 1
     materialLocation: 1
     searchTexturesGlobally: 0

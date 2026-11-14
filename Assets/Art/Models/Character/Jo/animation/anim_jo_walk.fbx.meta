@@ -1,44 +1,9 @@
 fileFormatVersion: 2
-guid: acf8e9326f5f3594084d44eea3baf2a2
+guid: 836235b6402754b4e85fed7255306d38
 ModelImporter:
   serializedVersion: 24501
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mat_Boots_L
-    second: {fileID: 2100000, guid: 33ae739ef341c5640a69abf0d870a838, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mat_Hair
-    second: {fileID: 2100000, guid: 51d1042988681604abe7eddc8ad9c957, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mat_Hand_L
-    second: {fileID: 2100000, guid: e3e0db66d1007fa43ae4adc09065536d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mat_Head
-    second: {fileID: 2100000, guid: 7089890f4cbf8ab4988ae6c194563370, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mat_Jacket
-    second: {fileID: 2100000, guid: b8bc239b0d8a2434186d74d2aee0bcdf, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mat_Jeans
-    second: {fileID: 2100000, guid: 8d11e77655ecdf647a71ed0011112afa, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mat_Sweater
-    second: {fileID: 2100000, guid: dcf6d4bc1e8879a43a057dfd67aa6654, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -65,7 +30,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: anim_jo_walk
+      takeName: anim_jo_walk
+      internalID: -4221300748751772211
+      firstFrame: 0
+      lastFrame: 36
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []

@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _gunTransform;
     [SerializeField] private float _maxShootRange = 100f;
     [SerializeField] private float _gunDamage = 1f;
+    
+    [SerializeField] private Animator _animator;
 
     private CharacterController _controller;
     private Vector2 _moveVector;
@@ -24,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         _playerControls = new Player_Controls();
+
     }
 
     void OnEnable()
@@ -93,6 +96,9 @@ public class PlayerMovement : MonoBehaviour
         _controller.Move(move * _moveSpeed * Time.deltaTime);
 
         // Player was jittering a bunch if I didn't apply some downward grav
+
+        // _animator.SetFloat("Velocity", _playerVelocity.magnitude);
+
         _playerVelocity.y += _gravity * Time.deltaTime;
         _controller.Move(_playerVelocity * Time.deltaTime);
     }
