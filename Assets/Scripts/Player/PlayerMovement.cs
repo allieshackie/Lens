@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +18,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _gunDamage = 1f;
     
     [SerializeField] private Animator _animator;
+
+    // Testing 
+    [SerializeField] private TextMeshProUGUI _velocityText;
 
     private CharacterController _controller;
     private Vector2 _moveVector;
@@ -96,8 +101,10 @@ public class PlayerMovement : MonoBehaviour
         _controller.Move(move * _moveSpeed * Time.deltaTime);
 
 
-        // _playerVelocity is compounding over time rather than resetting to 0 when not moving.
-        // _animator.SetFloat("Velocity", _playerVelocity.magnitude);
+        float animVelocity = Mathf.Clamp(Mathf.Round(_controller.velocity.magnitude), 0, _moveSpeed);
+        _animator.SetFloat("Velocity", animVelocity);
+
+        _velocityText.text = "Velocity: " + animVelocity;
 
         // Player was jittering a bunch if I didn't apply some downward grav
         _playerVelocity.y += _gravity * Time.deltaTime;
