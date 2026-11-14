@@ -639,8 +639,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd5ccb5b61a960b4094bece23465d940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  _moveSpeed: 5
-  _strafeSpeed: 3
+  _moveSpeed: 1.6
+  _strafeSpeed: 1.1
   _gravity: -9.81
   _lookSpeed: 0.15
   _cameraTarget: {fileID: 1072391766}
@@ -830,7 +830,7 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 1
+  UpdateMethod: 2
   BlendUpdateMethod: 1
   LensModeOverride:
     Enabled: 0
