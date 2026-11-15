@@ -100,12 +100,15 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.DrawLine(_gunTransform.position, cameraRay.GetPoint(_maxShootRange), Color.yellow, 1.5f);
         }
+
+        _animator.SetTrigger("Shoot");
     }
 
     private void OnADSEnter(InputAction.CallbackContext context)
     {
         _adsCamera.Priority = 20;
         _adsActive = true;
+        _animator.SetBool("IsAiming", true);
 
         _reticle.SetADS(true);
     }
@@ -114,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _adsCamera.Priority = 5;
         _adsActive = false;
+        _animator.SetBool("IsAiming", false);
 
         _reticle.SetADS(false);
     }
