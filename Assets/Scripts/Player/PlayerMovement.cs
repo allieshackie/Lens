@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -23,7 +24,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _maxShootRange = 100f;
     [SerializeField] private float _gunDamage = 1f;
     
+    // Visuals
     [SerializeField] private Animator _animator;
+    [SerializeField] private ParticleSystem _bulletCasing;
+    [SerializeField] private Light _muzzleFlash;
 
     // Testing 
     [SerializeField] private TextMeshProUGUI _velocityText;
@@ -102,6 +106,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         _animator.SetTrigger("Shoot");
+        _bulletCasing.Emit(1);
+        StartCoroutine(FlashSequence());
     }
 
     private void OnADSEnter(InputAction.CallbackContext context)
@@ -172,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
         float animVelocity = Mathf.Clamp(new Vector2(velocity.x, velocity.z).magnitude, 0f, speed);
         _animator.SetFloat("Velocity", animVelocity);
 
-        _velocityText.text = "Velocity: " + Mathf.Round(animVelocity);
+        //_velocityText.text = "Velocity: " + Mathf.Round(animVelocity);
     }
 
     private void RotatePlayer()
@@ -190,5 +196,13 @@ public class PlayerMovement : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0f, yaw, 0f);
         _cameraTarget.localRotation = Quaternion.Euler(_currentPitch, 0f, 0f);
+    }
+
+    private IEnumerator FlashSequence()
+    {
+        _muzzleFlash.enabled = true;
+        yield return new WaitForSeconds(0.125f);
+        _muzzleFlash.enabled = false;
+
     }
 }
