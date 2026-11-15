@@ -133,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
         _controller.Move((move * _moveSpeed + _playerVelocity) * Time.deltaTime);
 
         float animVelocity = Mathf.Clamp(_controller.velocity.magnitude, 0f, _moveSpeed);
-        _animator.SetFloat("Velocity", animVelocity, 0.1f, Time.deltaTime);
+        _animator.SetFloat("Velocity", animVelocity);
 
         _velocityText.text = "Velocity: " + Mathf.Round(animVelocity);
     }

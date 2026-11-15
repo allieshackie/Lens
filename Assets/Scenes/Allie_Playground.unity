@@ -641,11 +641,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _moveSpeed: 1.6
   _strafeSpeed: 1.1
-  _gravity: -9.81
+  _gravity: -5.21
   _lookSpeed: 0.15
-  _lookDampening: 0.08
-  _maxLookUp: -45
-  _maxLookDown: 45
+  _lookDampening: 0.05
+  _maxLookUp: -30
+  _maxLookDown: 30
   _cameraTarget: {fileID: 1072391766}
   _playerCamera: {fileID: 865421699}
   _gunTransform: {fileID: 196609363}
@@ -833,7 +833,7 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 2
+  UpdateMethod: 1
   BlendUpdateMethod: 1
   LensModeOverride:
     Enabled: 0
