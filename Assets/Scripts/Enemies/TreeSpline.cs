@@ -13,13 +13,20 @@ public class TreeSpline : MonoBehaviour
 
     private bool _hasReachedBottom;
 
-    void Start()
+    void Awake()
     {
         _splineAnimate.PlayOnAwake = false;
         _splineAnimate.Completed += OnDescentComplete;
     }
 
-    public void StartDescent()
+    public void Init(SplineContainer spline)
+    {
+        _spline = spline;
+        _splineAnimate.Container = spline;
+        StartDescent();
+    }
+
+    private void StartDescent()
     {
         if (_hasReachedBottom) 
         {
