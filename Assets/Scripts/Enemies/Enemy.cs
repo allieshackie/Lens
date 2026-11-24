@@ -30,16 +30,12 @@ public class Enemy : MonoBehaviour
 
     public void TakeHit()
     {
-        if (_dying)
+        if (_dying || _immortal)
         {
             return; 
         }
 
-        if (!_immortal)
-        {
-            _health--;
-        }
-
+        _health--;
         _animator.SetTrigger("IsAttacked");
 
         OnHit?.Invoke();
