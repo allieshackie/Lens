@@ -29,9 +29,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private ParticleSystem _bulletCasing;
     [SerializeField] private Light _muzzleFlash;
 
-    // Testing 
-    [SerializeField] private TextMeshProUGUI _velocityText;
-
     private CharacterController _controller;
     private Vector2 _moveVector;
     private Vector3 _playerVelocity;
@@ -177,8 +174,6 @@ public class PlayerMovement : MonoBehaviour
         Vector3 velocity = _controller.velocity;
         float animVelocity = Mathf.Clamp(new Vector2(velocity.x, velocity.z).magnitude, 0f, speed);
         _animator.SetFloat("Velocity", animVelocity);
-
-        //_velocityText.text = "Velocity: " + Mathf.Round(animVelocity);
     }
 
     private void RotatePlayer()
