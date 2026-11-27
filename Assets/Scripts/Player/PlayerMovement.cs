@@ -4,10 +4,13 @@ using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Animations.Rigging;
+using static Unity.U2D.Physics.PhysicsBody;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5.0f;
+    [SerializeField] private float _sprintSpeed = 5.0f;
     [SerializeField] private float _adsSpeed = 3.0f;
     [SerializeField] private float _gravity = -9.81f;
 
@@ -23,11 +26,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _gunTransform;
     [SerializeField] private float _maxShootRange = 100f;
     [SerializeField] private float _gunDamage = 1f;
+    [SerializeField] private Transform _aimTarget;
     
     // Visuals
     [SerializeField] private Animator _animator;
     [SerializeField] private ParticleSystem _bulletCasing;
     [SerializeField] private Light _muzzleFlash;
+    [SerializeField] private Rig _aimRig;
 
     private CharacterController _controller;
     private Vector2 _moveVector;
@@ -37,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _mouseCaptured = true;
     private bool _adsActive = false;
+    private bool _isSprinting = false;
 
     private float _targetYaw;
     private float _targetPitch;
@@ -58,6 +64,9 @@ public class PlayerMovement : MonoBehaviour
         _playerControls.Player.RClick.performed += OnADSEnter;
         _playerControls.Player.RClick.canceled += OnADSExit;
 
+        _playerControls.Player.Sprint.performed += OnSprint;
+        _playerControls.Player.Sprint.canceled += OnSprintCancelled;
+
         _playerControls.Player.DebugReleaseMouse.performed += OnToggleMouse;
 
         _playerControls.Player.Enable();        
@@ -71,6 +80,9 @@ public class PlayerMovement : MonoBehaviour
         _playerControls.Player.Attack.performed -= OnShoot;
         _playerControls.Player.RClick.performed -= OnADSEnter;
         _playerControls.Player.RClick.canceled -= OnADSExit;
+
+        _playerControls.Player.Sprint.performed -= OnSprint;
+        _playerControls.Player.Sprint.canceled -= OnSprintCancelled;
 
         _playerControls.Player.DebugReleaseMouse.performed -= OnToggleMouse;
 
@@ -107,11 +119,24 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(FlashSequence());
     }
 
+    private void OnSprint(InputAction.CallbackContext context)
+    {
+        _isSprinting = true;
+    }
+
+    private void OnSprintCancelled(InputAction.CallbackContext context) 
+    {
+        _isSprinting = false;
+    }
+
     private void OnADSEnter(InputAction.CallbackContext context)
     {
+
         _adsCamera.Priority = 20;
         _adsActive = true;
         _animator.SetBool("IsAiming", true);
+        _aimRig.weight = 1;
+        _adsCamera.Target.TrackingTarget = _cameraTarget;
 
         _reticle.SetADS(true);
     }
@@ -121,6 +146,8 @@ public class PlayerMovement : MonoBehaviour
         _adsCamera.Priority = 5;
         _adsActive = false;
         _animator.SetBool("IsAiming", false);
+        _aimRig.weight = 0;
+        _adsCamera.Target.TrackingTarget = _overShouldCamera.transform;
 
         _reticle.SetADS(false);
     }
@@ -168,8 +195,15 @@ public class PlayerMovement : MonoBehaviour
         {
             _playerVelocity.y = -0.2f;
         }
-        float speed = _adsActive ? _adsSpeed : _moveSpeed;
+
+        // TODO: Add lerping when going from _moveSpeed, to _sprintSpeed.
+        float speed = _adsActive ? _adsSpeed : _isSprinting ? _sprintSpeed : _moveSpeed ;
         _controller.Move((move * speed + _playerVelocity) * Time.deltaTime);
+
+        if (!_adsActive)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move), Time.deltaTime * 2f);
+        }
 
         Vector3 velocity = _controller.velocity;
         float animVelocity = Mathf.Clamp(new Vector2(velocity.x, velocity.z).magnitude, 0f, speed);
@@ -182,14 +216,33 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        Vector2 lookInput = _playerControls.Player.Look.ReadValue<Vector2>();
-        _targetYaw += lookInput.x * _lookSpeed;
-        _targetPitch = Mathf.Clamp(_targetPitch - lookInput.y * _lookSpeed, _maxLookUp, _maxLookDown);
-        
-        float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetYaw, ref _yawVelocity, _lookDampening);
-        _currentPitch = Mathf.SmoothDampAngle(_currentPitch, _targetPitch, ref _pitchVelocity, _lookDampening);
 
-        transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+        Vector2 lookInput = _playerControls.Player.Look.ReadValue<Vector2>();
+
+        if (_adsActive)
+        {
+            _targetPitch = Mathf.Clamp(_targetPitch - lookInput.y * _lookSpeed, _maxLookUp, _maxLookDown);
+            _targetYaw = _overShouldCamera.transform.eulerAngles.y;
+            float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetYaw, ref _yawVelocity, _lookDampening);
+            float targetPitch = _overShouldCamera.transform.eulerAngles.x;
+            _currentPitch = Mathf.SmoothDampAngle(_currentPitch, targetPitch, ref _pitchVelocity, _lookDampening);
+
+            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+        }
+        else
+        {
+            /*
+            _targetPitch = Mathf.Clamp(_targetPitch - lookInput.y * _lookSpeed, _maxLookUp, _maxLookDown);
+            _targetYaw = _overShouldCamera.transform.eulerAngles.y;
+
+            float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetYaw, ref _yawVelocity, _lookDampening);
+            float targetPitch = _overShouldCamera.transform.eulerAngles.x;
+            _currentPitch = Mathf.SmoothDampAngle(_currentPitch, targetPitch, ref _pitchVelocity, _lookDampening);
+
+            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+            */
+        }
+
         _cameraTarget.localRotation = Quaternion.Euler(_currentPitch, 0f, 0f);
     }
 
